@@ -1,29 +1,9 @@
-local textplates = require("__textplates__/textplates")
-textplates.build()
+local arrowplates = require("arrowplates")
 
-local arrow_direction = {
-    ["arrow_n"] = 0,
-    ["arrow_ne"] = 1,
-    ["arrow_e"] = 2,
-    ["arrow_se"] = 3,
-    ["arrow_s"] = 4,
-    ["arrow_sw"] = 5,
-    ["arrow_w"] = 6,
-    ["arrow_nw"] = 7,
-}
-local arrow_symbols = {}
-for symbol, dir in pairs(arrow_direction) do
-    arrow_symbols[dir] = symbol
-end
-
-local arrow_indices = {}
-local arrow_variants = {}
-for i, symbol in ipairs(textplates.symbols) do
-  if string.find(symbol, "arrow_") then
-    arrow_variants[symbol] = i
-    arrow_indices[i] = symbol
-  end
-end
+-- Plan:
+-- * Intercept entity creation (player, robot) and determine which arrow
+--   entity to place instead.
+-- * Migrate existing entities on the map.
 
 local function rotate_arrow (event)
     entity = event.entity

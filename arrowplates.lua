@@ -1,16 +1,34 @@
+-- Load directly from textplates. This does not support mods that add additional plates because
+-- the remote interface isn't available in during the data phase.
 local textplates = require("__textplates__/textplates")
+if not mods then textplates.build() end
 
--- symbol_indexes is set based on textplates.symbols. That means a remote interface can not add new symbols.
--- Can get the types by using the remote interface, which is slick.
--- Can not get the indexes that way.
--- get_textplate_symbols has a comment implying that it's fine for other mods to call.
--- So we'll do that.
+local arrowplates = {}
 
--- Then we need all the types.
--- textplates.types is just the base ones.
--- Option 1: Call the remote interface ourselves.
--- Option 2: Go looking for the items.
+arrowplates.symbol_to_direction = {
+    ["arrow_n"] = 0,
+    ["arrow_ne"] = 1,
+    ["arrow_e"] = 2,
+    ["arrow_se"] = 3,
+    ["arrow_s"] = 4,
+    ["arrow_sw"] = 5,
+    ["arrow_w"] = 6,
+    ["arrow_nw"] = 7,
+}
+arrowplates.direction_to_symbol = {}
+for symbol, dir in pairs(arrowplates.symbol_to_direction) do
+    arrowplates.direction_to_symbol[dir] = symbol
+end
 
--- The problem is, that happens in control.
--- What about during data?
--- The textplates mod only registers its own prototypes, by iterating through textplates.types.
+arrowplates.symbol_to_variation = {}
+arrowplates.variation_to_symbol = {}
+for i, symbol in ipairs(textplates.symbols) do
+  if string.find(symbol, "arrow_") then
+    arrowplates.symbol_to_variation[symbol] = i
+    arrowplates.variation_to_symbol[i] = symbol
+  end
+end
+
+arrowplates.types = table.deepcopy(textplates.types)
+
+return arrowplates
