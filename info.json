@@ -5,5 +5,8 @@
     "author": "daniel.jacobowitz@gmail.com",
     "factorio_version": "1.1",
     "dependencies": ["base >= 1.1", "textplates >= 0.6.10"],
-    "description": "Make the arrow symbols from Text Plates rotatable."
+    "description": "Make the arrow symbols from Text Plates rotatable.",
+    "package": {
+        "sync_portal_details": true
+    }
 }
