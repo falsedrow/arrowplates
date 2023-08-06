@@ -13,6 +13,7 @@ There are two new console commands to help with adding this mod to an existing s
   accidentally made all the arrows in my blueprints face south.
 
 Limitations:
+
 * No automatic conversion of old blueprints. Place the blueprint and select new
   contents for it to get arrowplates.
 * When placing an old blueprint, undo won't remove the new arrowplates.
