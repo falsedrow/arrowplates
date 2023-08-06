@@ -33,10 +33,10 @@ local function replace_entity(entity, player_index, use_current_direction)
 
     local update = get_updated_entity(ghost_name or name, entity.graphics_variation)
     if not update then return end
-    -- When building entities, use the symbol that textplates displays.
-    -- When explicitly migrating a map, fix up blueprints that were rotated.
-    -- This is just a heuristic, sometimes you'll get funny arrows.
-    -- This doesn't fix old unmodified blueprints... but at least you get what the cursor showed you.
+    -- When building entities, use the symbol that textplates displays. When
+    -- explicitly migrating a map, adjust by the entity's rotation to fix up
+    -- blueprints that were rotated before placement. This is just a heuristic,
+    -- sometimes you'll get funny arrows.
     if use_current_direction then
         update.direction = (update.direction + entity.direction) % 8
     end
@@ -118,31 +118,46 @@ end
 script.on_event(defines.events.on_player_setup_blueprint, on_blueprint)
 script.on_event(defines.events.on_player_configured_blueprint, on_blueprint)
 
-local function migrate_arrows (command)
+-- If you've been using blueprints with arrows in them, then you've probably got
+-- a lot of arrows on your map that aren't facing north, and they are visually
+-- not pointing at what they're supposed to. Run /migrate_arrows to fix them
+-- up. This assumes the arrow would be correct if the blueprint rotation left
+-- the arrow facing north - if your blueprints have a different direction, then
+-- see /rotate_arrows.
+local function migrate_arrows(command)
     local all_types = {}
     for _, type in pairs(arrowplates.types) do
         table.insert(all_types, type.name)
     end
+
     local surface = game.players[command.player_index].surface
-    local entities = surface.find_entities_filtered{name = all_types}
+    local entities = surface.find_entities_filtered { name = all_types }
     for _, entity in pairs(entities) do
         replace_entity(entity, command.player_index, true)
     end
-    entities = surface.find_entities_filtered{name = 'entity-ghost', ghost_name = all_types}
+    entities = surface.find_entities_filtered { name = 'entity-ghost', ghost_name = all_types }
     for _, entity in pairs(entities) do
         replace_entity(entity, command.player_index, true)
     end
 end
 commands.add_command("migrate_arrows", "Make all arrows on this surface rotatable.", migrate_arrows)
 
--- Known bugs:
--- * If we replace an arrow that was part of a blueprint, undo won't remove our new
---   arrow.
---
--- Not implemented:
--- * Supporting extension mods which register additional text plates.
---   We need to know about them in the data phase to create the new
---   entities. We'd have to look through registered entities in
---   data-final-fixes and guess which ones were really textplates.
--- * Pipette. We get a textplate into the cursor, but we can't tell
---   the textplates mod which symbol should be placed next.
+-- Rotate all arrowplates entities on the map.
+local function rotate_arrows(command)
+    local all_types = {}
+    for _, type in pairs(arrowplates.types) do
+        table.insert(all_types, type.name .. '-arrowplates-diagonal')
+        table.insert(all_types, type.name .. '-arrowplates-straight')
+    end
+
+    local surface = game.players[command.player_index].surface
+    local entities = surface.find_entities_filtered { name = all_types }
+    for _, entity in pairs(entities) do
+        entity.direction = (entity.direction + 2) % 8
+    end
+    entities = surface.find_entities_filtered { name = 'entity-ghost', ghost_name = all_types }
+    for _, entity in pairs(entities) do
+        entity.direction = (entity.direction + 2) % 8
+    end
+end
+commands.add_command("rotate_arrows", "Rotate all arrowplates arrows clockwise.", rotate_arrows)

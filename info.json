@@ -1,9 +1,9 @@
 {
     "name": "arrowplates",
     "version": "1.0.0",
-    "title": "Rotatable Arrows for Text Plates",
+    "title": "Arrowplates",
     "author": "daniel.jacobowitz@gmail.com",
     "factorio_version": "1.1",
     "dependencies": ["base >= 1.1", "textplates >= 0.6.10"],
-    "description": "Arrows which rotate along with blueprints."
+    "description": "Make the arrow symbols from Text Plates rotatable."
 }
