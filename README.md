@@ -24,4 +24,4 @@ Limitations:
 * Pipette does not set the textplates GUI to the correct symbol. There's no
   way to tell Text Plates which symbol should be placed next.
 
-This mod is distributed under https://creativecommons.org/licenses/by-nc/4.0/.
+This mod is distributed under https://opensource.org/license/mit/.
