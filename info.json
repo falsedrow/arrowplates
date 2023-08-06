@@ -7,6 +7,7 @@
     "dependencies": ["base >= 1.1", "textplates >= 0.6.10"],
     "description": "Make the arrow symbols from Text Plates rotatable.",
     "package": {
+        "git_publish_branch": "main",
         "sync_portal_details": true
     }
 }
