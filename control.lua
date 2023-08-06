@@ -109,7 +109,7 @@ script.on_event(defines.events.on_player_setup_blueprint, on_blueprint)
 script.on_event(defines.events.on_player_configured_blueprint, on_blueprint)
 
 
--- Plan:
+-- TODO:
 -- * Migrate existing entities on the map. Maybe a command so that you can
 --   pick by-rotation or by-appearance.
 
