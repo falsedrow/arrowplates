@@ -6,13 +6,12 @@ local function get_updated_entity(type, variation)
     if not symbol then return end
     local direction = arrowplates.symbol_to_direction[symbol]
     local new_name
-    if direction % 2 == 1 then
+    if direction.diagonal then
         new_name = type .. '-arrowplates-diagonal'
-        direction = direction - 1
     else
         new_name = type .. '-arrowplates-straight'
     end
-    return { name = new_name, direction = direction }
+    return { name = new_name, direction = direction.direction }
 end
 
 local function replace_entity(entity, player_index, use_current_direction)
@@ -59,7 +58,7 @@ local function replace_entity(entity, player_index, use_current_direction)
 end
 
 local function on_built_entity(event)
-    replace_entity(event.created_entity, event.player_index, false)
+    replace_entity(event.entity, event.player_index, false)
 end
 
 local built_entity_filter = {}
@@ -84,7 +83,10 @@ script.on_event(defines.events.on_robot_built_entity, on_built_entity,
 -- For a blueprint selection tool, the blueprint doesn't exist until on_player_configured_blueprint.
 local function on_blueprint(event)
     local player = game.players[event.player_index]
-    local blueprint = player.cursor_stack
+    local blueprint = event.stack
+    if not blueprint then 
+        blueprint = player.cursor_stack
+    end
     if not blueprint or not blueprint.valid_for_read then return end
     if blueprint.is_blueprint_book then
         local inventory = blueprint.get_inventory(defines.inventory.item_main)

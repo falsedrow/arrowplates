@@ -6,19 +6,15 @@ if not mods then textplates.build() end
 local arrowplates = {}
 
 arrowplates.symbol_to_direction = {
-    ["arrow_n"] = 0,
-    ["arrow_ne"] = 1,
-    ["arrow_e"] = 2,
-    ["arrow_se"] = 3,
-    ["arrow_s"] = 4,
-    ["arrow_sw"] = 5,
-    ["arrow_w"] = 6,
-    ["arrow_nw"] = 7,
+    ["arrow_n"] = { diagonal = false, direction = defines.direction.north},
+    ["arrow_ne"] = { diagonal = true, direction = defines.direction.north},
+    ["arrow_e"] = { diagonal = false, direction = defines.direction.east},
+    ["arrow_se"] = { diagonal = true, direction = defines.direction.east},
+    ["arrow_s"] = { diagonal = false, direction = defines.direction.south},
+    ["arrow_sw"] = { diagonal = true, direction = defines.direction.south},
+    ["arrow_w"] = { diagonal = false, direction = defines.direction.west},
+    ["arrow_nw"] = { diagonal = true, direction = defines.direction.west},
 }
-arrowplates.direction_to_symbol = {}
-for symbol, dir in pairs(arrowplates.symbol_to_direction) do
-    arrowplates.direction_to_symbol[dir] = symbol
-end
 
 arrowplates.symbol_to_variation = {}
 arrowplates.variation_to_symbol = {}
